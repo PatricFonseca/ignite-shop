@@ -1,7 +1,16 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
+import {  Roboto_Flex } from 'next/font/google'
+import { getCssText } from '@/styles'
+import { globalStyles } from '@/styles/global'
+import Image from 'next/image'
 
-const inter = Inter({ subsets: ['latin'] })
+import logo from '@/assets/logo.svg'
+import {Container, Header} from '@/styles/pages/app'
+
+// const inter = Inter({ subsets: ['latin'] })
+const roboto = Roboto_Flex({subsets: ['latin']})
+// const acme = Acme({subsets: ['latin'], weight: '400', variable: '--font-t'} ,)
+
+globalStyles()
 
 export const metadata = {
   title: 'Create Next App',
@@ -13,9 +22,21 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+  
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={roboto.className}>
+      <head>
+        <style id='stiches' dangerouslySetInnerHTML={{__html: getCssText()}}/>
+      </head>
+      <body>
+        <Container>
+          <Header>
+            <Image src={logo} alt="" />
+          </Header>
+          {children}
+        </Container>
+      </body>
     </html>
   )
 }
