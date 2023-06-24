@@ -19,7 +19,7 @@ export const ImageContainer = styled('div', {
   padding: '0.25rem',
 
   display: 'flex',
-  alignContent: 'center',
+  alignItems: 'center',
   justifyContent: 'center',
 
   img: {
