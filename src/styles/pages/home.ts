@@ -9,7 +9,7 @@ export const HomeContainer = styled('main', {
   minHeight: 656,
 })
 
-export const Product = styled('div', {
+export const ItemProduct = styled('div', {
   background: 'linear-gradient(100deg, #1ea483 0%, #7465d4 100%);',
   borderRadius: 8,
   // padding: '0.25rem',
@@ -44,6 +44,12 @@ export const Product = styled('div', {
     opacity: 0,
     transition: 'all 0.2s ease-in-out',
 
+    div: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '0.2rem',
+    },
+
     strong: {
       fontSize: '$lg',
       color: '$gray100',
@@ -62,4 +68,43 @@ export const Product = styled('div', {
       opacity: 1,
     },
   },
+})
+
+export const CartButton = styled('button', {
+  // position: 'relative',
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  cursor: 'pointer',
+  backgroundColor: '$green500',
+  color: '$white',
+  border: 'none',
+  padding: '0.75rem',
+  borderRadius: '8px',
+  textDecoration: 'none',
+
+  '&:hover': {
+    backgroundColor: '$green300',
+    color: '$white',
+  },
+
+  // span: {
+  //   display: 'flex',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+
+  //   backgroundColor: '$green500',
+  //   color: '$gray100',
+
+  //   position: 'absolute',
+  //   top: -6,
+  //   right: -5,
+
+  //   width: '1.2rem',
+  //   height: '1.2rem',
+  //   borderRadius: '50%',
+  //   fontWeight: 'bold',
+  // },
 })
