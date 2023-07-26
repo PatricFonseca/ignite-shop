@@ -14,17 +14,17 @@ export const Modal = styled('div', {
 
   backgroundColor: '$gray800',
   height: '100vh',
-  // width: 0,
-  width: '27.5rem',
+  width: '30.5rem',
   right: -500,
 
   overflowX: 'hidden',
-  // overflowY: 'hidden',
+
+  overflowY: 'hidden',
   transition: '0.5s',
 
   '&.open': {
     right: 0,
-    width: '27.5rem',
+    width: '30.5rem',
   },
 
   header: {
@@ -48,6 +48,7 @@ export const ProductList = styled('div', {
     // gridTemplateColumns: '2fr 1fr',
     // gridTemplateAreas: 'image',
     gridTemplateColumns: '30% 60%',
+    paddingBottom: '0.5rem',
 
     div: {
       // gridArea: 'content',

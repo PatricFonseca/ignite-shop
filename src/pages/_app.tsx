@@ -44,7 +44,11 @@ export default function App({ Component, pageProps }: AppProps) {
           </CartButton>
         </Header>
 
-        <Component {...pageProps} activeSideCheckout={activeSideCheckout} />
+        <Component
+          {...pageProps}
+          activeSideCheckout={activeSideCheckout}
+          setActiveSideCheckout={handleCartButton}
+        />
       </Container>
     </CartProvider>
   )

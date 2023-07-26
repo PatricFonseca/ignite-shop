@@ -20,12 +20,12 @@ import { SideCheckout } from '@/components/sideCheckout'
 type ProductProps = Product & {
   name: string
   imageUrl: string
-  price: string
 }
 
 interface HomeProps {
   products: ProductProps[]
   activeSideCheckout: boolean
+  setActiveSideCheckout: () => void
   // products: {
   //   id: string
   //   name: string
@@ -35,7 +35,11 @@ interface HomeProps {
   // }[]
 }
 
-export default function Home({ products, activeSideCheckout }: HomeProps) {
+export default function Home({
+  products,
+  activeSideCheckout,
+  setActiveSideCheckout,
+}: HomeProps) {
   // const [sideMenuOpen, setSideMenuOpen] = useState(false)
   const { addItem } = useShoppingCart()
   const [sliderRef] = useKeenSlider({
@@ -60,7 +64,10 @@ export default function Home({ products, activeSideCheckout }: HomeProps) {
       </Head>
 
       <HomeContainer ref={sliderRef} className="keen-slider">
-        <SideCheckout open={activeSideCheckout} />
+        <SideCheckout
+          open={activeSideCheckout}
+          setActiveSideCheckout={setActiveSideCheckout}
+        />
         {products?.map((product) => {
           return (
             <>
@@ -82,7 +89,7 @@ export default function Home({ products, activeSideCheckout }: HomeProps) {
                   <footer>
                     <div>
                       <strong>{product.name}</strong>
-                      <span>{product.price}</span>
+                      <span>{product.formattedPrice}</span>
                     </div>
                     <CartButton onClick={(e) => handleClickProduct(e, product)}>
                       <Handbag size={32} weight="bold" />
@@ -104,21 +111,22 @@ export const getStaticProps: GetStaticProps = async () => {
     expand: ['data.default_price'],
   })
 
-  console.log(response)
-
   const products = response.data.map((product) => {
     const price = product.default_price as Stripe.Price
     price.unit_amount = price.unit_amount ?? 0
+
+    console.log(price.id)
 
     return {
       id: product.id,
       name: product.name,
       imageUrl: product.images[0],
-      price: new Intl.NumberFormat('pt-BR', {
+      formattedPrice: new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
       }).format(price.unit_amount / 100),
       price_id: price.id,
+      price: price.unit_amount / 100,
     }
   })
 
