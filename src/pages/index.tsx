@@ -11,9 +11,8 @@ import { HomeContainer, ItemProduct, CartButton } from '@/styles/pages/home'
 
 import { stripe } from '@/lib/stripes'
 import { Handbag } from '@phosphor-icons/react'
-import { DebugCart, useShoppingCart } from 'use-shopping-cart'
+import { useShoppingCart } from 'use-shopping-cart'
 import { Product } from 'use-shopping-cart/core'
-import { SideCheckout } from '@/components/sideCheckout'
 
 // import cartIcon from '@/assets/cartIcon.svg'
 
@@ -35,11 +34,7 @@ interface HomeProps {
   // }[]
 }
 
-export default function Home({
-  products,
-  activeSideCheckout,
-  setActiveSideCheckout,
-}: HomeProps) {
+export default function Home({ products }: HomeProps) {
   // const [sideMenuOpen, setSideMenuOpen] = useState(false)
   const { addItem } = useShoppingCart()
   const [sliderRef] = useKeenSlider({
@@ -64,10 +59,6 @@ export default function Home({
       </Head>
 
       <HomeContainer ref={sliderRef} className="keen-slider">
-        <SideCheckout
-          open={activeSideCheckout}
-          setActiveSideCheckout={setActiveSideCheckout}
-        />
         {products?.map((product) => {
           return (
             <>

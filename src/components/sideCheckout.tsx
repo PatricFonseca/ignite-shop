@@ -6,13 +6,12 @@ import {
   CloseButton,
 } from '@/styles/components/sideCheckout'
 import { X } from '@phosphor-icons/react'
-import { GetServerSideProps } from 'next'
 import { useShoppingCart } from 'use-shopping-cart'
 import { useEffect, useState } from 'react'
 
 interface SideCheckoutProps {
   open: boolean
-  setActiveSideCheckout: () => void
+  setActiveSideCheckout: (activeSideCheckout: boolean) => void
 }
 
 interface Product {
@@ -62,7 +61,7 @@ export function SideCheckout({
   }, [cartDetails])
 
   function handleCloseButton() {
-    setActiveSideCheckout()
+    setActiveSideCheckout(!open)
   }
 
   function handleRemoveProduct(product: Product) {

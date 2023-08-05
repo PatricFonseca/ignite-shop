@@ -18,8 +18,8 @@ export const Modal = styled('div', {
   right: -500,
 
   overflowX: 'hidden',
-
   overflowY: 'hidden',
+
   transition: '0.5s',
 
   '&.open': {
@@ -103,7 +103,9 @@ export const Container = styled('div', {
   // maxHeight: '100vh',
   // maxHeight: '100vh',
   overflow: 'auto',
-  height: '600px',
+
+  // height: '600px',
+  height: '100vh',
 
   footer: {
     display: 'flex',
