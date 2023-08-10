@@ -8,6 +8,7 @@ import {
 import { X } from '@phosphor-icons/react'
 import { useShoppingCart } from 'use-shopping-cart'
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 interface SideCheckoutProps {
   open: boolean
@@ -21,6 +22,7 @@ interface Product {
   quantity: number
   imageUrl: string
   formattedPrice: string
+  priceId: string
 }
 
 export function SideCheckout({
@@ -29,6 +31,8 @@ export function SideCheckout({
 }: SideCheckoutProps) {
   const { cartDetails, removeItem, cartCount, totalPrice } = useShoppingCart()
   const [products, setProducts] = useState([] as Product[])
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+    useState(false)
 
   useEffect(() => {
     console.log('cart', cartDetails)
@@ -47,6 +51,7 @@ export function SideCheckout({
         }).format(x.price),
         quantity: x.quantity,
         imageUrl: x.imageUrl,
+        priceId: x.price_id,
       }
     })
 
@@ -66,6 +71,24 @@ export function SideCheckout({
 
   function handleRemoveProduct(product: Product) {
     removeItem(product.id)
+  }
+
+  async function handleCheckout() {
+    try {
+      setIsCreatingCheckoutSession(true)
+      const response = await axios.post('/api/checkout', {
+        cart: products,
+        // priceId: product.defaultPriceId,
+      })
+
+      const { checkoutUrl } = response.data
+
+      window.location.href = checkoutUrl
+    } catch (error) {
+      // conectar com uma ferramenta de observabilidade(datadog / sentry)
+      setIsCreatingCheckoutSession(false)
+      alert('Falha ao redirecionar ao checkout!')
+    }
   }
 
   return (
@@ -117,7 +140,9 @@ export function SideCheckout({
             </div>
           </div>
 
-          <button>Finalizar compra</button>
+          <button onClick={handleCheckout} disabled={isCreatingCheckoutSession}>
+            Finalizar compra
+          </button>
         </footer>
       </Container>
     </Modal>
