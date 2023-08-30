@@ -147,8 +147,12 @@ export const Container = styled('div', {
 
       transition: '0.1s',
 
-      '&:hover': {
+      '&:hover:not([disabled])': {
         backgroundColor: '$green300',
+      },
+
+      '&:disabled': {
+        cursor: 'not-allowed',
       },
     },
   },

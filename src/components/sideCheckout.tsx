@@ -35,12 +35,9 @@ export function SideCheckout({
     useState(false)
 
   useEffect(() => {
-    console.log('cart', cartDetails)
-    console.log(Object.values(cartDetails || {}))
     const arr = Object.values(cartDetails || {})
 
     const productsArr = arr.map((x) => {
-      console.log(x)
       return {
         id: x.id,
         name: x.name,
@@ -150,6 +147,3 @@ export function SideCheckout({
 }
 
 // export const getServerSideProps: GetServerSideProps = async () => {
-
-//   return {}
-// }

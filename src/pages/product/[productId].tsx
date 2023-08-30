@@ -1,46 +1,71 @@
 import { stripe } from '@/lib/stripes'
-import {
-  ImageContainer,
-  ProductContainer,
-  ProductDetails,
-} from '@/styles/pages/product'
-import axios from 'axios'
+
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Stripe from 'stripe'
+import { useShoppingCart } from 'use-shopping-cart'
+import { Product as ProductType } from 'use-shopping-cart/core'
+import {
+  ImageContainer,
+  ProductContainer,
+  ProductDetails,
+} from '@/styles/pages/product'
 
-interface ProductProps {
-  product: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-    description: string
-    defaultPriceId: string
-  }
+type ProductT = ProductType & {
+  // id: string
+  name: string
+  imageUrl: string
+  price: string
+  description: string
+  // price_id: string
+  // defaultPriceId: string
+}
+
+type ProductProps = {
+  product: ProductT
+  // product: {
+  //   id: string
+  //   name: string
+  //   imageUrl: string
+  //   price: string
+  //   description: string
+  //   defaultPriceId: string
+  // }
 }
 
 export default function Product({ product }: ProductProps) {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
     useState(false)
 
-  async function handleBuyProduct() {
+  const { addItem } = useShoppingCart()
+
+  // async function handleBuyProduct() {
+  //   try {
+  //     setIsCreatingCheckoutSession(true)
+  //     const response = await axios.post('/api/checkout', {
+  //       priceId: product.defaultPriceId,
+  //     })
+
+  //     const { checkoutUrl } = response.data
+
+  //     window.location.href = checkoutUrl
+  //   } catch (error) {
+  //     // conectar com uma ferramenta de observabilidade(datadog / sentry)
+  //     setIsCreatingCheckoutSession(false)
+  //     alert('Falha ao redirecionar ao checkout!')
+  //   }
+  // }
+  function handleAddProductToCart() {
     try {
       setIsCreatingCheckoutSession(true)
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
-      })
-
-      const { checkoutUrl } = response.data
-
-      window.location.href = checkoutUrl
-    } catch (error) {
-      // conectar com uma ferramenta de observabilidade(datadog / sentry)
+      addItem(product, { count: 1 })
       setIsCreatingCheckoutSession(false)
-      alert('Falha ao redirecionar ao checkout!')
+    } catch (error) {
+      setIsCreatingCheckoutSession(false)
+      alert('Falha ao adicionar produto ao carrinho!')
     }
   }
 
@@ -66,10 +91,10 @@ export default function Product({ product }: ProductProps) {
           <p>{product.description}</p>
 
           <button
-            onClick={handleBuyProduct}
+            onClick={handleAddProductToCart}
             disabled={isCreatingCheckoutSession}
           >
-            Comprar agora
+            Colocar na sacola
           </button>
         </ProductDetails>
       </ProductContainer>
@@ -108,7 +133,8 @@ export const getStaticProps: GetStaticProps<
           currency: 'BRL',
         }).format(price.unit_amount / 100),
         description: product.description,
-        defaultPriceId: price.id,
+        price_id: price.id,
+        // defaultPriceId: price.id,
       },
     },
     revalidate: 60 * 60 * 1, // 1 hour

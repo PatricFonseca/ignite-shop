@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { stripe } from '@/lib/stripes'
-import { Product } from 'use-shopping-cart/core'
 import type { NextApiRequest, NextApiResponse } from 'next'
 // import { CartEntry } from 'use-shopping-cart/core'
 
@@ -9,18 +8,24 @@ type Data = {
   error?: string
 }
 
+interface Item {
+  priceId: string
+  quantity: number
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  console.log('req', req.body)
-
   const { cart } = req.body
   // const { priceId } = req.body
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed.' })
   }
+
+  // TODO: Adicionar proteção pro cart
+  // TODO: Criar tipo pro request no map
 
   // if (!priceId) {
   //   return res.status(400).json({ error: 'Price not found.' })
@@ -29,10 +34,7 @@ export default async function handler(
   const successUrl = `${process.env.NEXT_URL}/success?session_id={CHECKOUT_SESSION_ID}`
   const cancelUrl = `${process.env.NEXT_URL}/`
 
-  // const products = cart.map((item: Product) => {
-  //   return item.product_data
-  // })
-  const products = cart.map((item) => {
+  const products = cart.map((item: Item) => {
     return { price: item.priceId, quantity: item.quantity }
   })
 
@@ -41,10 +43,11 @@ export default async function handler(
     cancel_url: cancelUrl,
     mode: 'payment',
     line_items: products,
-    // price: priceId,
-    /*    quantity: 1,
-    },
-     */
+    /* [
+      { price: priceId,
+        quantity: 1,
+      }
+      ] */
   })
 
   return res.status(201).json({
